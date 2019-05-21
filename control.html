@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>control</title>
+    <link rel="stylesheet" href="./css/index.css">
+
+    <script src="./js/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=27qg3f2H29V5CM6NUttXxGGykLVMBOc9&__ec_v__=20190126"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script src="./js/jquery-3.3.1.js"></script>
+</head>
+
+<body>
+    <div class="monitor">
+        <div class="nav-tab" id="nav-tab">
+            <ul>
+                <li style="font-weight: bolder;border-bottom: 3px solid rgb(52,168,255);">终端统计</li>
+                <li>在线人员分布</li>
+            </ul>
+        </div>
+        <div class="monitor-con" id="monitor-con">
+            <div style="display:block" class="chart cntl-chart" id="terminal"></div>
+            <div style="display:none" class="chart cntl-chart-map cntl-chart " id="onlineMap"></div>
+            </div>
+        </div>
+        
+    <script>
+        
+        window.onload = function () {
+            var titles = document.getElementById('nav-tab').getElementsByTagName('li');
+            var divs = document.getElementById('monitor-con').getElementsByClassName('chart');
+            //遍历所有li，给他们加上id和值，并绑定事件
+            for (var i = 0; i < titles.length; i++) {
+                titles[i].id = i;
+                titles[i].onclick = function () {
+                        for (var j = 0; j < titles.length; j++) {
+                            titles[j].className = "";
+                            divs[j].style.display = "none";
+                            titles[j].style.fontWeight = "normal";
+                            titles[j].style.borderBottom = "none";
+                        }
+                        divs[this.id].style.display = "block";
+                        titles[this.id].style.fontWeight = "bolder";
+                        titles[this.id].style.borderBottom = "3px solid rgb(52,168,255)";
+                    }
+                }
+        }
+
+        //chart
+        //chart3
+        var cntlChart = echarts.init(document.getElementById('terminal'));
+        
+        // 指定图表的配置项和数据
+        var option1 = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data:['执行记录仪','笔记本','手持专业终端','单兵设备','卡口摄像头','手机','车载终端','其他'],
+                // x: 'right',
+                // data:[]
+            },
+            series: [
+                {
+                    name:'访问来源',
+                    type:'pie',
+                    selectedMode: 'single',
+                    radius: [0, '40%'],
+
+                    label: {
+                        normal: {
+                            position: 'inner'
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data:[
+                        {value:335, name:'一般终端'},
+                        {value:679, name:'一般受控终端'},
+                        {value:1548, name:'增强受控终端'}
+                    ]
+                },
+                {
+                    name:'访问来源',
+                    type:'pie',
+                    radius: ['50%', '65%'],
+                    label: {
+                        normal: {
+                            rich: {
+                                a: {
+                                    color: '#999',
+                                    lineHeight: 22,
+                                    align: 'center'
+                                },
+                                
+                                hr: {
+                                    borderColor: '#aaa',
+                                    width: '100%',
+                                    borderWidth: 0.5,
+                                    height: 0
+                                },
+                                b: {
+                                    fontSize: 16,
+                                    lineHeight: 33
+                                },
+                                per: {
+                                    color: '#eee',
+                                    backgroundColor: '#334455',
+                                    padding: [2, 4],
+                                    borderRadius: 2
+                                }
+                            }
+                        }
+                    },
+                    data:[
+                        {value:335, name:'笔记本'},
+                        {value:410, name:'执行记录仪'},
+                        {value:234, name:'手持专业终端'},
+                        {value:135, name:'其他'},
+                        {value:1048, name:'手机'},
+                        {value:251, name:'单兵设备'},
+                        {value:147, name:'卡口摄像头'},
+                        {value:302, name:'车载终端'},
+                    ]
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        cntlChart.setOption(option1);
+
+
+        //map
+        var dom = document.getElementById("onlineMap");
+        var chartMap = echarts.init(dom);
+        var app = {};
+        optMap = null;
+        chartMap.showLoading();
+
+        $.get('./js/henan.json', function (geoJson) {
+
+            chartMap.hideLoading();
+
+            echarts.registerMap('HK', geoJson);
+
+            chartMap.setOption(
+                optMap = {
+                    
+                title: {
+                    text: '河南省各地市工程延误数量分布',
+                   
+                    fontSize: 16,
+                    orient: 'vertical',
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}<br/>{c} (p / km2)'
+                },
+               
+                visualMap: {
+                    min: 0,
+                    max: 100,
+                    text:['High','Low'],
+                    realtime: false,
+                    calculable: true,
+                    inRange: {
+                        color: ['rgb(232, 246, 253)','rgb(157, 216, 247)', 'rgb(92, 178, 239)']
+                    }
+                },
+                series: [
+                    {
+                        name: '河南省各地市工程延误数量分布',
+                        type: 'map',
+                        mapType: 'HK', // 自定义扩展图表类型
+                        itemStyle:{
+                            normal:{label:{show:true}},
+                            emphasis:{label:{show:true}},
+                        },
+                        data:[
+                            {name: '郑州市', value: 95},
+                            {name: '安阳市', value: 11},
+                            {name: '鹤壁市', value: 16},
+                            {name: '濮阳市', value: 36},
+                            {name: '新乡市', value: 27},
+                            {name: '焦作市', value: 35},
+                            {name: '三门峡市', value: 22},
+                            {name: '洛阳市', value: 57},
+                            {name: '开封市', value:  85},
+                            {name: '商丘市', value: 22},
+                            {name: '许昌市', value: 23},
+                            {name: '平顶山市', value: 49},
+                            {name: '漯河市', value: 35},
+                            {name: '周口市', value: 18},
+                            {name: '南阳市', value: 30},
+                            {name: '驻马店市', value:9},
+                            {name: '信阳市', value: 4},
+                        ],
+                        // 自定义名称映射
+                        // nameMap: {
+                        //     'Central and Western': '中西区',
+                        //     'Eastern': '东区',
+                        //     'Islands': '离岛',
+                        //     'Kowloon City': '九龙城',
+                        //     'Kwai Tsing': '葵青',
+                        //     'Kwun Tong': '观塘',
+                        //     'North': '北区',
+                        //     'Sai Kung': '西贡',
+                        //     'Sha Tin': '沙田',
+                        //     'Sham Shui Po': '深水埗',
+                        //     'Southern': '南区',
+                        //     'Tai Po': '大埔',
+                        //     'Tsuen Wan': '荃湾',
+                        //     'Tuen Mun': '屯门',
+                        //     'Wan Chai': '湾仔',
+                        //     'Wong Tai Sin': '黄大仙',
+                        //     'Yau Tsim Mong': '油尖旺',
+                        //     'Yuen Long': '元朗'
+                        // }
+                    }
+                ]
+            });
+        });;
+        if (optMap && typeof optMap === "object") {
+            chartMap.setOption(optMap, true);
+        }
+    </script>
+</body>
+</html>

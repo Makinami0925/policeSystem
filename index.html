@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>index</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <img src="./img/quit.png" alt="">
+            <p onclick="tologin()">退出</p>
+            <img src="./img/admin.png" alt="" onclick="tologin()">
+            <p>你好，admin</p>
+        </div>
+
+        <div class="nav-left" id="nav-left">
+            <ul>
+                <li>
+                    <a href="#" class="splink">
+                        <div class="img-hide"><img src="./img/home.png" alt="" class="shift30"></div>
+                        首页
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="splink"> 
+                        <div class="img-hide"><img src="./img/monitor.png" alt="" class="shift30"></div>
+                        级联监控
+                    </a>
+                </li>
+                <li>
+
+                    <a href="#" class="splink">
+                        <div class="img-hide"><img src="./img/control.png" alt="" class="shift30"></div>终端管控
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="splink">
+                        <div class="img-hide"><img src="./img/statistics.png" alt="" class="shift30"></div>应用统计
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="splink">
+                        <div class="img-hide"><img src="./img/warning.png" alt="" class="shift30"></div>违规告警
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="splink">
+                        <div class="img-hide"><img src="./img/about.png" alt="" class="shift30"></div>
+                        关于平台
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <iframe id="idxframe" src="monitor.html" frameborder="0" scrolling="no" style="margin:0 auto;" width="100%" height="100%"></iframe>
+        </div>
+
+
+    </div>
+
+    <script>
+        function tologin(){
+            window.location.href="login.html";
+        }
+
+        window.onload =function(){
+
+            //左侧导航栏图标效果
+            var linka = document.getElementById('nav-left').getElementsByTagName('a');
+            var imgChg = document.getElementById('nav-left').getElementsByTagName('img');
+            
+            for(var e = 0;e<linka.length;e++){
+                linka[e].id=e;
+                imgChg[e].id=e;
+                switch(e){
+                    case 0:
+                        linka[e].onmouseenter = function(){
+                            imgChg[this.id].className = "shift3";
+                        }
+                        linka[e].onmouseleave = function(){
+                            imgChg[this.id].className = "shift30";
+                        }
+                        break;
+                    case 1:
+                        linka[e].onmouseenter = function(){
+                            imgChg[this.id].className = "shift3";
+                        }
+                        linka[e].onmouseleave = function(){
+                            imgChg[this.id].className = "shift30";
+                        }
+                        break;
+                    case 2:
+                        linka[e].onmouseenter = function(){
+                            imgChg[this.id].className = "shift3";
+                        }
+                        linka[e].onmouseleave = function(){
+                            imgChg[this.id].className = "shift30";
+                        }
+                        break;
+                    case 3:
+                        linka[e].onmouseenter = function(){
+                            imgChg[this.id].className = "shift3";
+                        }
+                        linka[e].onmouseleave = function(){
+                            imgChg[this.id].className = "shift30";
+                        }
+                        break;
+                    case 4:
+                        linka[e].onmouseenter = function(){
+                            imgChg[this.id].className = "shift3";
+                        }
+                        linka[e].onmouseleave = function(){
+                            imgChg[this.id].className = "shift30";
+                        }
+                        break;
+                    case 5:
+                        linka[e].onmouseenter = function(){
+                            imgChg[this.id].className = "shift3";
+                        }
+                        linka[e].onmouseleave = function(){
+                            imgChg[this.id].style.right="30px";
+                        }
+                        break;
+                }
+            }                
+            
+            //iframe页面跳转
+            var ifmli = document.getElementById('nav-left').getElementsByTagName('li');
+            var ifmSrc = document.getElementById('idxframe');
+            var ifma = document.getElementsByClassName('splink');
+
+            for(var i=0;i<ifmli.length;i++){
+                ifmli[i].id = i;
+                switch(i){
+                    case 0:
+                        ifmli[i].onclick = function(){
+                            ifmSrc.src="home.html";
+                            // console.log(ifma[this.id]);
+                            for(var j=0;j<ifma.length;j++){
+                                ifma[j].classList.add("addcolor");
+                            }
+                            ifma[this.id].classList.remove("addcolor");
+                            ifma[this.id].classList.add("addcolorW");
+                            // imgChg[this.id].style.right ="3px";
+                        }
+                        break;
+                    case 1:
+                        ifmli[i].onclick = function(){
+                            ifmSrc.src="monitor.html";
+                            for(var j=0;j<ifma.length;j++){
+                                ifma[j].classList.add("addcolor");
+                            }
+                            ifma[this.id].classList.remove("addcolor");
+                            ifma[this.id].classList.add("addcolorW");
+                        }
+                        break;
+                    case 2:
+                        ifmli[i].onclick = function(){
+                            ifmSrc.src="control.html";
+                            for(var j=0;j<ifma.length;j++){
+                                ifma[j].classList.add("addcolor");
+                            }
+                            ifma[this.id].classList.remove("addcolor");
+                            ifma[this.id].classList.add("addcolorW");
+                        }
+                        break;
+                    case 3:
+                        ifmli[i].onclick = function(){
+                            ifmSrc.src="statistics.html";
+                            for(var j=0;j<ifma.length;j++){
+                                ifma[j].classList.add("addcolor");
+                            }
+                            ifma[this.id].classList.remove("addcolor");
+                            ifma[this.id].classList.add("addcolorW");
+                        }
+                        break;
+                    case 4:
+                        ifmli[i].onclick = function(){
+                            ifmSrc.src="warning.html";
+                            for(var j=0;j<ifma.length;j++){
+                                ifma[j].classList.add("addcolor");
+                            }
+                            ifma[this.id].classList.remove("addcolor");
+                            ifma[this.id].classList.add("addcolorW");
+                        }
+                        break;
+                    case 5:
+                        ifmli[i].onclick = function(){
+                            ifmSrc.src="about.html";
+                            for(var j=0;j<ifma.length;j++){
+                                ifma[j].classList.add("addcolor");
+                            }
+                            ifma[this.id].classList.remove("addcolor");
+                            ifma[this.id].classList.add("addcolorW");
+                        }
+                        break;
+                }
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
+
